@@ -38,7 +38,7 @@ void yaw_Calibrate(float newXsensYaw, float visionYaw, bool visionAvailable, flo
 
 	set_Pin(LED2_pin, visionAvailable);
 	set_Pin(LED3_pin, isCalibrationNeeded(visionYaw, oldXsensYaw, yawOffset));
-	set_Pin(LED4_pin, isRotatingSlow(visionYaw));
+	set_Pin(LED4_pin, isRotatingSlow(rateOfTurn));
 
 	bool calibratedThisTick = false;
 	if (isCalibrationNeeded(visionYaw, oldXsensYaw, yawOffset) && isRotatingSlow(rateOfTurn) && visionAvailable) {
