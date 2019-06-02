@@ -31,6 +31,8 @@ static void limit();
 //makes the PWM absolute
 static void scale();
 
+static void limitScale();
+
 //Set the PWM for the wheels
 static void SetPWM();
 
@@ -100,8 +102,7 @@ void wheels_Update(){
 				lockTimes[wheel] = HAL_GetTick();
 			}
 		}
-		limit();
-		scale();
+		limitScale();
 		SetDir();
 		SetPWM();
 	}
@@ -145,6 +146,27 @@ static void computeWheelSpeed(){
 		wheelSpeed[wheel] = -1 * ENCODERtoOMEGA * encoderData[wheel]; // We define clockwise as positive, therefore we have a minus sign here
 	}
 	ResetEncoder();
+}
+
+
+static void limitScale(){
+	for(wheel_names wheel = wheels_RF; wheel <= wheels_LF; wheel++){
+		// Determine direction
+		if(pwm[wheel] <= -1.0F){
+			pwm[wheel] *= -1;
+			direction[wheel] = 0; // turn anti-clockwise
+		} else if(pwm[wheel] >= 1.0F){
+			direction[wheel] = 1; // turn clockwise
+		} else {
+			pwm[wheel] = 0; // the motor does not brake if pwm 0 is sent
+		}
+		// Limit PWM
+		if(pwm[wheel] < PWM_CUTOFF){
+			pwm[wheel] = 0.0F;
+		} else if(pwm[wheel] > MAX_PWM){
+			pwm[wheel] = MAX_PWM;
+		}
+	}
 }
 
 static void scale(){

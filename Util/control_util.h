@@ -47,7 +47,7 @@
 #define ENCODERtoOMEGA (float)2*M_PI/(TIME_DIFF*GEAR_RATIO*PULSES_PER_ROTATION) // conversion factor from number of encoder pulses to wheel speed [rad/s]
 
 // Control
-#define YAW_MARGIN (0.25F/180.0F)*(float)M_PI // margin at which the I-value of the PID is reset to 0
+#define YAW_MARGIN (2.0F/180.0F)*(float)M_PI // margin at which the I-value of the PID is reset to 0
 #define WHEEL_REF_LIMIT 2200/OMEGAtoPWM // Limit the maximum wheel reference to leave room for the wheels PID
 
 // Geneva
@@ -56,9 +56,9 @@
 
 // Shoot
 #define MIN_KICK_TIME 25 				// minimum time period of kicking
-#define MAX_KICK_TIME 60 				// maximum time period of kicking
+#define MAX_KICK_TIME 200000 				// maximum time period of kicking
 #define MIN_CHIP_TIME 25 				// minimum time period of chipping
-#define MAX_CHIP_TIME 60 				// maximum time period of chipping
+#define MAX_CHIP_TIME 200000 				// maximum time period of chipping
 #define TIMER_FREQ 10000 			// frequency [Hz] of TIM6  (Clock frequency divided by prescaler)
 #define READY_CALLBACK_FREQ 1 		// frequency [Hz] of callback when shootState is Ready
 #define CHARGING_CALLBACK_FREQ 10 	// frequency [Hz] of callback when shootState is Charging

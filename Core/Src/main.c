@@ -293,6 +293,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			stateInfo.xsensAcc[body_x] = MTi->acc[body_x];
 			stateInfo.xsensAcc[body_y] = MTi->acc[body_y];
 			stateInfo.xsensYaw = (MTi->angles[2]*M_PI/180); //Gradients to Radians
+			stateInfo.rateOfTurn = MTi->gyr[2];
 			stateEstimation_Update(&stateInfo);
 
 			// State control
@@ -310,6 +311,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 			wheels_Update();
 		}
+	}
+	else if (htim->Instance == htim10.Instance) {
+		buzzer_Callback();
 	}
 	else if (htim->Instance == htim11.Instance) {
 		shoot_Callback();
@@ -497,7 +501,12 @@ int main(void)
 	  }
 	  executeCommands(&receivedData);
 
-	  //set_Pin(LED6_pin, read_Pin(RF_LOCK_pin));
+//	  if (read_Pin(RF_LOCK_pin) || read_Pin(RB_LOCK_pin) || read_Pin(LB_LOCK_pin) || read_Pin(LF_LOCK_pin)) {
+//	    set_Pin(LED2_pin, 1);
+//	  } else {
+//	    set_Pin(LED2_pin, 0);
+//	  }
+//	  set_Pin(LED3_pin, halt);
 
 	  /*
 	   * Print stuff on PuTTY for debugging
@@ -1208,9 +1217,9 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = (APB-1)/4.5;
+  htim10.Init.Prescaler = (APB-1);
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = MAX_PWM;
+  htim10.Init.Period = 2271;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
