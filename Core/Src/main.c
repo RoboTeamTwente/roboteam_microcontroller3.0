@@ -447,7 +447,7 @@ int main(void)
   buzzer_Init();
   
   SX = Wireless_Init(20, COMM_SPI);
-  MTi = MTi_Init(NO_ROTATION_TIME, XSENS_FILTER);
+  //MTi = MTi_Init(NO_ROTATION_TIME, XSENS_FILTER);
   uint16_t ID = get_Id();
   Putty_printf("ID: %u\n\r",ID);
 
@@ -469,7 +469,6 @@ int main(void)
 	   */
 	  static int batCounter = 0;
 	  if (read_Pin(Bat_pin) && batCounter == 1000){
-		  Putty_printf("BATTERY EMPTY!! :( \n\r");
 		  set_Pin(LED4_pin, 1);
 		  Putty_DeInit();
 		  wheels_DeInit();
@@ -479,9 +478,11 @@ int main(void)
 		  shoot_DeInit();
 		  dribbler_DeInit();
 		  buzzer_DeInit();
-		  MTi_DeInit(MTi);
+		  //MTi_DeInit(MTi);
 		  Wireless_DeInit();
-	  }else if (read_Pin(Bat_pin) && batCounter < 1001) {
+	  	  batCounter += 1;
+		  Putty_printf("BATTERY EMPTY!! :( \n\r");
+	  }else if (read_Pin(Bat_pin) && batCounter < 1000) {
 	  	  batCounter += 1;
 	  } else if (batCounter<1000){
 		  //Putty_printf("Running :)\n\r");
