@@ -447,7 +447,7 @@ int main(void)
   buzzer_Init();
   
   SX = Wireless_Init(20, COMM_SPI);
-  //MTi = MTi_Init(NO_ROTATION_TIME, XSENS_FILTER);
+  MTi = MTi_Init(NO_ROTATION_TIME, XSENS_FILTER);
   uint16_t ID = get_Id();
   Putty_printf("ID: %u\n\r",ID);
 
@@ -478,7 +478,7 @@ int main(void)
 		  shoot_DeInit();
 		  dribbler_DeInit();
 		  buzzer_DeInit();
-		  //MTi_DeInit(MTi);
+		  MTi_DeInit(MTi);
 		  Wireless_DeInit();
 	  	  batCounter += 1;
 		  Putty_printf("BATTERY EMPTY!! :( \n\r");
