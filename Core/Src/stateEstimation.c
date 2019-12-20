@@ -32,6 +32,7 @@ void stateEstimation_Update(StateInfo* input) {
 	float meanAcc[2] = {0.0f};
 	movingAverage(input->xsensAcc, meanAcc);
 
+
 	//kalman_Update(input->xsensAcc, vel); 	// var = 6.25 Use for testing the kalman filter without MA.
 	kalman_Update(meanAcc, vel);			// var = 0.25 Use for testing the kalman filter with MA.
 
