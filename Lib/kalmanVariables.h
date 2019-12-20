@@ -51,7 +51,7 @@ float aI[STATE*STATE] = {
 		0,1,0,0,
 		0,0,1,0,
 		0,0,0,1};
-//
+// Previously estimated covariance
 float aPold[STATE*STATE] = {
 		STATE_VAR,0,0,0,
 		0,STATE_VAR,0,0,

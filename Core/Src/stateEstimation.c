@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////// VARIABLES
 
 static float state[3] = {0.0f};
-
+#define windowsize 10
 ///////////////////////////////////////////////////// PRIVATE FUNCTION DECLARATIONS
 
 //Transforms wheel speed to body velocity
@@ -29,8 +29,8 @@ void stateEstimation_Update(StateInfo* input) {
 	kalman_CalculateK();
 
 	float meanAcc[2] = {0.0f};
-	movingAverage(input->xsensAcc, meanAcc);
-	kalman_Update(meanAcc, vel);			// ACC_VAR = 0.25 (kalmanVariables.h)
+	movingAverage(input->xsensAcc, meanAcc); //Applying a moving average to meanAcc
+	kalman_Update(meanAcc, vel);			 // PERLIMINARY ACC_VAR = 0.25 (kalmanVariables.h); Vel and modified meanAcc are used in Kalman filter
 
 	float kalman_State[4] = {0.0f};
 	kalman_GetState(kalman_State);
@@ -61,15 +61,15 @@ void movingAverage(float acc[2], float meanAcc[2]){
 	// Define sumX and sumY, which are the sum of all (10) stored values to calculate the moving average
 	static float sumX = 0;
 	static float sumY = 0;
-	static float storedValuesX[10] = {0.0f};
-	static float storedValuesY[10] = {0.0f};
+	static float storedValuesX[windowsize] = {0.0f};
+	static float storedValuesY[windowsize] = {0.0f};
 
 	// Update the sum of all stored values by subtracting the last value
-	sumX -= storedValuesX[9];
-	sumY -= storedValuesY[9];
+	sumX -= storedValuesX[windowsize-1];
+	sumY -= storedValuesY[windowsize-1];
 
 	// Shift all stored values one index upward
-	for (int i = 8; i>=0; i--){
+	for (int i = windowsize-2; i>=0; i--){
 		storedValuesX[i+1] = storedValuesX[i];
 		storedValuesY[i+1] = storedValuesY[i];
 	}
@@ -83,7 +83,7 @@ void movingAverage(float acc[2], float meanAcc[2]){
 	sumY += acc[1];
 
 	// Calculate the mean
-	meanAcc[body_x] = sumX/10;
-	meanAcc[body_y] = sumY/10;
+	meanAcc[body_x] = sumX/windowsize;
+	meanAcc[body_y] = sumY/windowsize;
 }
 
